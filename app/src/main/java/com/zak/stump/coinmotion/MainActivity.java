@@ -1,16 +1,17 @@
 package com.zak.stump.coinmotion;
 
-import android.app.DownloadManager;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -42,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Locale deviceLocale;
     private Currency defaultCur;
     private RequestQueue requestQueue;
+    private TextView curFrom;
+    private TextView curTo;
+    private TextView instructions;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,23 +67,74 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Date currentDate = Calendar.getInstance().getTime();
         dateOfRate.setMaxDate(currentDate.getTime());
 
+        curFrom = (TextView) findViewById(R.id.curFrom);
+        curFrom.setOnClickListener(this);
+
+        curTo = (TextView) findViewById(R.id.curTo);
+        curTo.setOnClickListener(this);
+
         convertButton = (Button) findViewById(R.id.convertButton);
         convertButton.setOnClickListener(this);
 
         autoFrom = (AutoCompleteTextView) findViewById(R.id.autoFrom);
+        // Open up all options when clicked
         autoFrom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 autoFrom.showDropDown();
             }
         });
-        autoFrom.setText(defaultCur.getCurrencyCode());
+        // Autofill first box with currency code of system locale
+        autoFrom.setText(defaultCur.getCurrencyCode().trim());
+        if(CUR_CODES.contains(autoFrom.getText().toString())){
+            Currency currency = Currency.getInstance(autoFrom.getText().toString());
+            curFrom.setText(currency.getSymbol());
+        }
+        // Watch for matching currencies and update symbol
+        autoFrom.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(CUR_CODES.contains(autoFrom.getText().toString())){
+                    Currency currency = Currency.getInstance(charSequence.toString());
+                    curFrom.setText(currency.getSymbol());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
 
         autoTo = (AutoCompleteTextView) findViewById(R.id.autoTo);
         autoTo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 autoTo.showDropDown();
+            }
+        });
+        autoTo.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(CUR_CODES.contains(autoTo.getText().toString())){
+                    Currency currency = Currency.getInstance(charSequence.toString());
+                    curTo.setText(currency.getSymbol());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
 
@@ -93,6 +148,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         autoTo.setAdapter(adapter2);
 
         requestQueue = Volley.newRequestQueue(this);
+
+        instructions = (TextView) findViewById(R.id.dateInstr);
+        instructions.setOnClickListener(this);
     }
 
     @Override
@@ -119,9 +177,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         // Collect and format strings for URL from datepicker and autofills
-        String day = String.format(deviceLocale,"%02d", dateOfRate.getDayOfMonth());
-        String month = String.format(deviceLocale,"%02d", dateOfRate.getMonth() + 1);
-        String year = String.format(deviceLocale,"%04d", dateOfRate.getYear());
+        String day = String.format(deviceLocale, "%02d", dateOfRate.getDayOfMonth());
+        String month = String.format(deviceLocale, "%02d", dateOfRate.getMonth() + 1);
+        String year = String.format(deviceLocale, "%04d", dateOfRate.getYear());
         String curFrom = autoFrom.getText().toString();
         String curTo = autoTo.getText().toString();
 
@@ -153,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         // API acts unexpected if base and symbols are the same, so set to same value
-        if(autoFrom.getText().toString().equals(autoTo.getText().toString())){
+        if (autoFrom.getText().toString().equals(autoTo.getText().toString())) {
             valueTo.setText(valueFrom.getText().toString());
             return;
         }
