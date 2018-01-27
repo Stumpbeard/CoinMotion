@@ -31,7 +31,7 @@
                 android:layout_weight="1"
                 android:completionThreshold="1"
                 android:dropDownHeight="wrap_content"
-                android:text="EUR" />
+                android:hint="@string/cur_hint" />
 
             <EditText
                 android:id="@+id/valueFrom"
@@ -41,8 +41,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="@string/amount_hint"
-                android:inputType="numberDecimal"
-                android:text="1.00" />
+                android:inputType="numberDecimal" />
 
         </LinearLayout>
 
@@ -58,7 +57,7 @@
                 android:layout_weight="1"
                 android:completionThreshold="1"
                 android:dropDownHeight="wrap_content"
-                android:text="EUR" />
+                android:hint="@string/cur_hint" />
 
             <EditText
                 android:id="@+id/valueTo"
@@ -67,8 +66,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="@string/amount_hint"
-                android:inputType="numberDecimal"
-                android:text="1.00" />
+                android:inputType="numberDecimal" />
 
         </LinearLayout>
 
