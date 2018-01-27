@@ -25,18 +25,19 @@
             tools:layout_editor_absoluteX="8dp">
 
             <AutoCompleteTextView
-                android:id="@+id/autoCompleteTextView3"
+                android:id="@+id/autoFrom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
             <EditText
+                android:id="@+id/valueFrom"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="@string/amountHint"
-                android:inputType="textPersonName" />
+                android:inputType="numberDecimal" />
         </LinearLayout>
 
         <LinearLayout
@@ -45,35 +46,36 @@
             android:orientation="horizontal">
 
             <AutoCompleteTextView
-                android:id="@+id/autoCompleteTextView5"
+                android:id="@+id/autoTo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
             <EditText
-                android:id="@+id/editText5"
+                android:id="@+id/valueTo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
                 android:hint="@string/amountHint"
-                android:inputType="textPersonName" />
+                android:inputType="numberDecimal" />
         </LinearLayout>
 
         <DatePicker
-            android:id="@+id/datePicker3"
+            android:id="@+id/dateOfRate"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:calendarViewShown="false"
-            android:datePickerMode="spinner" />
+            android:datePickerMode="spinner"
+            android:minDate="01/04/1999" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/convertButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="false"
