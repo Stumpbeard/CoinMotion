@@ -22,9 +22,11 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Currency;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button convertButton;
     private AutoCompleteTextView autoFrom;
     private AutoCompleteTextView autoTo;
+    private Locale deviceLocale;
     private Currency defaultCur;
     private RequestQueue requestQueue;
 
@@ -45,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         // Getting locale for purposes of default currency code
-        Locale deviceLocale = Locale.getDefault();
+        deviceLocale = Locale.getDefault();
         defaultCur = Currency.getInstance(deviceLocale);
 
         initView();
@@ -100,20 +103,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void submit() {
-        // validate
+        // Error if amount to be converted is not entered
         String valueFromString = valueFrom.getText().toString().trim();
         if (TextUtils.isEmpty(valueFromString)) {
-            Toast.makeText(this, "valueFrom empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please enter a value to be converted.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String valueToString = valueTo.getText().toString().trim();
-        if (TextUtils.isEmpty(valueToString)) {
-            Toast.makeText(this, "valueTo empty", Toast.LENGTH_SHORT).show();
+        // Error if both currencies are not selected
+        if (!CUR_CODES.contains(autoFrom.getText().toString()) || !CUR_CODES.contains(autoTo.getText().toString())) {
+            Toast.makeText(this, "Please choose currencies for conversion from the list.", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        String url = "https://api.fixer.io/latest";
+        // Collect and format strings for URL from datepicker and autofills
+        String day = String.format(deviceLocale,"%02d", dateOfRate.getDayOfMonth());
+        String month = String.format(deviceLocale,"%02d", dateOfRate.getMonth() + 1);
+        String year = String.format(deviceLocale,"%04d", dateOfRate.getYear());
+        String curFrom = autoFrom.getText().toString();
+        String curTo = autoTo.getText().toString();
+
+        String url = String.format(deviceLocale, "https://api.fixer.io/%s-%s-%s?base=%s&symbols=%s", year, month, day, curFrom, curTo);
+        System.out.println(url);
         JsonObjectRequest objRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
@@ -122,16 +133,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(MainActivity.this, "Failed request", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Failed request, try again later.", Toast.LENGTH_SHORT).show();
             }
         });
         requestQueue.add(objRequest);
 
     }
 
-    private static final String[] CUR_CODES = new String[]{
+    private static final List CUR_CODES = Arrays.asList(
             "EUR", "USD", "AUD", "BGN", "BRL", "CAD", "CHF", "CNY", "CZK", "DKK", "GBP", "HKD",
             "HRK", "HUF", "IDR", "ILS", "INR", "JPY", "KRW", "MXN", "MYR", "NOK", "NZD", "PHP",
             "PLN", "RON", "RUB", "SEK", "SGD", "THB", "TRY", "USD", "ZAR"
-    };
+    );
 }

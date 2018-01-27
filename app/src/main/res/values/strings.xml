@@ -7,6 +7,7 @@
     <string-array name="currency_choices">
         <item>EUR</item>
 		<item>USD</item>
+        <item>GBP</item>
 		<item>AUD</item>
 		<item>BGN</item>
 		<item>BRL</item>
@@ -15,7 +16,6 @@
 		<item>CNY</item>
 		<item>CZK</item>
 		<item>DKK</item>
-		<item>GBP</item>
 		<item>HKD</item>
         <item>HRK</item>
 		<item>HUF</item>
@@ -36,7 +36,6 @@
 		<item>SGD</item>
 		<item>THB</item>
 		<item>TRY</item>
-		<item>USD</item>
 		<item>ZAR</item>
     </string-array>
 </resources>
