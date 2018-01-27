@@ -64,9 +64,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:editable="false"
                 android:ems="10"
                 android:hint="@string/amount_hint"
-                android:inputType="numberDecimal" />
+                android:inputType="none" />
 
         </LinearLayout>
 

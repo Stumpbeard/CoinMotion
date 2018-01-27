@@ -20,6 +20,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -82,13 +83,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this,
                 R.array.currency_choices, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-//                android.R.layout.simple_dropdown_item_1line, CUR_CODES);
-        autoFrom.setAdapter(adapter);
-        autoTo.setAdapter(adapter);
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this,
+                R.array.currency_choices, android.R.layout.simple_spinner_item);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        autoFrom.setAdapter(adapter1);
+        autoTo.setAdapter(adapter2);
 
         requestQueue = Volley.newRequestQueue(this);
     }
@@ -128,7 +130,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         JsonObjectRequest objRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Toast.makeText(MainActivity.this, "Succeeded request", Toast.LENGTH_SHORT).show();
+                try {
+                    // Get values from response
+                    JSONObject objRates = response.getJSONObject("rates");
+                    Double rate = objRates.getDouble(autoTo.getText().toString());
+
+                    // Do exchange math
+                    Double fromAmount = Double.valueOf(valueFrom.getText().toString());
+                    String toAmount = String.valueOf(fromAmount * rate);
+
+                    // Populate field
+                    valueTo.setText(toAmount);
+
+                } catch (JSONException e) {
+                    Toast.makeText(MainActivity.this, "Problem fetching conversion.", Toast.LENGTH_SHORT).show();
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -136,6 +152,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(MainActivity.this, "Failed request, try again later.", Toast.LENGTH_SHORT).show();
             }
         });
+        // API acts unexpected if base and symbols are the same, so set to same value
+        if(autoFrom.getText().toString().equals(autoTo.getText().toString())){
+            valueTo.setText(valueFrom.getText().toString());
+            return;
+        }
+        // Otherwise fire request
         requestQueue.add(objRequest);
 
     }
