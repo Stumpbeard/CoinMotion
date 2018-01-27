@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">CoinMotion</string>
+    <string name="amountHint">Amount</string>
+</resources>
