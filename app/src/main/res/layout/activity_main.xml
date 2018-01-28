@@ -9,7 +9,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@mipmap/bg">
+        android:background="@mipmap/bg"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
     </RelativeLayout>
 
@@ -55,7 +57,7 @@
 
                 <TextView
                     android:id="@+id/curFrom"
-                    android:layout_width="wrap_content"
+                    android:layout_width="16dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
@@ -74,7 +76,7 @@
             </LinearLayout>
 
             <ImageButton
-                android:id="@+id/imageButton2"
+                android:id="@+id/switchButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#FFFFFF"
@@ -96,7 +98,7 @@
 
                 <TextView
                     android:id="@+id/curTo"
-                    android:layout_width="wrap_content"
+                    android:layout_width="16dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"

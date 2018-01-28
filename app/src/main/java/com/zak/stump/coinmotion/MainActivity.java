@@ -11,6 +11,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +47,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView curFrom;
     private TextView curTo;
     private TextView instructions;
+    private ImageButton switchButton;
+    private TextView dateInstr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
         // Autofill first box with currency code of system locale
         autoFrom.setText(defaultCur.getCurrencyCode().trim());
-        if(CUR_CODES.contains(autoFrom.getText().toString())){
+        if (CUR_CODES.contains(autoFrom.getText().toString())) {
             Currency currency = Currency.getInstance(autoFrom.getText().toString());
             curFrom.setText(currency.getSymbol());
         }
@@ -99,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(CUR_CODES.contains(autoFrom.getText().toString())){
+                if (CUR_CODES.contains(autoFrom.getText().toString())) {
                     Currency currency = Currency.getInstance(charSequence.toString());
                     curFrom.setText(currency.getSymbol());
                 }
@@ -126,7 +129,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(CUR_CODES.contains(autoTo.getText().toString())){
+                if (CUR_CODES.contains(autoTo.getText().toString())) {
                     Currency currency = Currency.getInstance(charSequence.toString());
                     curTo.setText(currency.getSymbol());
                 }
@@ -151,6 +154,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         instructions = (TextView) findViewById(R.id.dateInstr);
         instructions.setOnClickListener(this);
+
+        switchButton = (ImageButton) findViewById(R.id.switchButton);
+        switchButton.setOnClickListener(this);
     }
 
     @Override
@@ -159,6 +165,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.convertButton:
                 submit();
                 break;
+            case R.id.switchButton:
+                switchCurrencies();
+                break;
+        }
+    }
+
+    // Exchange the values of the two currencies
+    private void switchCurrencies() {
+        String tempFrom = autoFrom.getText().toString();
+        String tempTo = autoTo.getText().toString();
+        autoFrom.setText(tempTo);
+        autoTo.setText(tempFrom);
+
+        String valueToText = valueTo.getText().toString();
+        if (!TextUtils.isEmpty(valueToText)){
+            tempFrom = valueFrom.getText().toString();
+            tempTo = valueTo.getText().toString();
+            valueFrom.setText(tempTo);
+            valueTo.setText(tempFrom);
         }
     }
 
