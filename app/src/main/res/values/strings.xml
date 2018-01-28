@@ -4,6 +4,7 @@
     <string name="convert_button">Convert Currency</string>
     <string name="date_intr">Rate on this date:</string>
     <string name="cur_hint" >CUR</string>
+    <string name="image_desc">Background Image</string>
     <string-array name="currency_choices">
         <item>EUR</item>
 		<item>USD</item>

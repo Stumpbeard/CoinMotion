@@ -60,7 +60,7 @@
                     android:layout_width="16dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="right"
+                    android:gravity="end"
                     android:textAppearance="@android:style/TextAppearance.Material.Medium" />
 
                 <EditText
@@ -80,6 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#FFFFFF"
+                android:contentDescription="@string/image_desc"
                 app:srcCompat="@drawable/ic_compare_arrows_black_24dp" />
 
             <LinearLayout
@@ -101,7 +102,7 @@
                     android:layout_width="16dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="right"
+                    android:gravity="end"
                     android:textAppearance="@android:style/TextAppearance.Material.Medium" />
 
                 <EditText
