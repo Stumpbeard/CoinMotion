@@ -209,7 +209,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String curTo = autoTo.getText().toString();
 
         String url = String.format(deviceLocale, "https://api.fixer.io/%s-%s-%s?base=%s&symbols=%s", year, month, day, curFrom, curTo);
-        System.out.println(url);
         JsonObjectRequest objRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
